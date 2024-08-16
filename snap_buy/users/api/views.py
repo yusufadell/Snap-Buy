@@ -6,9 +6,25 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from snap_buy.users.models import Address
 from snap_buy.users.models import User
 
+from .serializers import AddressSerializer
 from .serializers import UserSerializer
+
+
+class AddressViewSet(
+    RetrieveModelMixin,
+    ListModelMixin,
+    UpdateModelMixin,
+    GenericViewSet,
+):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    lookup_field = "pk"
+
+    def get_queryset(self):
+        return self.queryset.filter(user_addresses=self.request.user)
 
 
 class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):

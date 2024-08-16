@@ -135,11 +135,6 @@ class User(AbstractUser):
     email = EmailField(_("email address"), unique=True)
     username = None  # type: ignore[assignment]
 
-    addresses = models.ManyToManyField(
-        "users.Address",
-        blank=True,
-        related_name="user_addresses",
-    )
     is_confirmed = models.BooleanField(default=True)
     last_confirm_email_request = models.DateTimeField(null=True, blank=True)
     note = models.TextField(null=True, blank=True)
@@ -163,6 +158,11 @@ class User(AbstractUser):
     uuid = models.UUIDField(default=uuid4, unique=True)
 
     # relations
+    addresses = models.ManyToManyField(
+        "users.Address",
+        blank=True,
+        related_name="user_addresses",
+    )
     default_shipping_address = models.ForeignKey(
         Address,
         related_name="+",
